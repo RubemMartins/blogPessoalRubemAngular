@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TemaService } from 'src/app/service/tema.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
@@ -19,7 +18,6 @@ export class PostagemDeleteComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private postagemService: PostagemService,
-    private temaService: TemaService
   ) { }
 
   ngOnInit(){

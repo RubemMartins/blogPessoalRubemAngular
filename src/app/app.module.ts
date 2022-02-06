@@ -19,8 +19,11 @@ import { PostagemDeleteComponent } from './delete/postagem-delete/postagem-delet
 import { UserEditComponent } from './edit/user-edit/user-edit.component';
 import { AlertasComponent } from './alertas/alertas.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { Routes,RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { OrderModule } from 'ngx-order-pipe';
 
-
+const routes: Routes = []; 
 
 @NgModule({
   declarations: [
@@ -39,11 +42,16 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     AlertasComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    RouterModule.forRoot(routes,{
+      anchorScrolling: 'enabled'
+    }),
+    OrderModule,
   ],
   providers: [{
     provide: LocationStrategy,

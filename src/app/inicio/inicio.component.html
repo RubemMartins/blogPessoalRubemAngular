@@ -7,7 +7,7 @@
           <p>Expresse aqui as suas ideias</p>
           <button class="btn btn-outline-light mr-3" data-toggle="modal" data-target="#exampleModal">Criar nova
             Postagem</button>
-          <a class="btn btn-light" href="#posts">Ver as postagens</a>
+          <a *ngIf="authService.adm()" class="btn btn-light" href="#posts">Ver as postagens</a>
         </div>
       </div>
     </div>
@@ -18,7 +18,7 @@
 
   <!-- Nav -->
   <div id="posts" class="container mt-5">
-    <nav>
+    <nav *ngIf="listaPostagens.length != 0">
       <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
         <a class="nav-link active text-secondary font-weight-bold" id="nav-todasPostagens-tab" data-toggle="tab"
           href="#nav-todasPostagens" role="tab" aria-controls="nav-todasPostagens" aria-selected="true">Todas as
@@ -31,16 +31,31 @@
           tema</a>
       </div>
     </nav>
+    <h2 *ngIf='listaPostagens.length == 0' class="text-center text-secondary mt-5">
+      Não existem postagens ainda...
+    </h2>
+
     <div class="tab-content mt-5" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-todasPostagens" role="tabpanel"
         aria-labelledby="nav-todasPostagens-tab">
 
-        <div class="card-columns">
+        <!--Barra pesquisa postagem-->
+        <div *ngIf="listaPostagens.length != 0" class="row d-flex justify-content-center mt-5 mb-5">
+          <div class="col-md-4">
+            <div class="form-group">
+              <input type="text" class="form-control" id="titulo" placeholder="Digite um titulo de postagem para pesquisa"
+              [(ngModel)]="tituloPost" (keyup)="findbyTituloPostagem()"> 
+            </div>
+          </div>
+        </div>
+        <!--/Barra pesquisa postagem-->
+
+        <div class="card-columns" 
+        *ngFor='let tema of listaTemas | orderBy  : key : reverse'>
           <div class="card text-center" *ngFor='let item of listaPostagens'>
             <div class="card-body">
               <h5 class="card-title m-0">{{item.titulo}}</h5>
-              <small class="text-muted">Tema: {{item.tema.descricao}}</small>
-              <p class="card-text mt-3">{{item.texto}}</p>
+              <small class="text-muted">{{item.texto}}</small>
               <p class="card-text"><small class="text-muted">{{item.data | date: 'dd/MM/yyyy'}} às {{item.data | date:
                   'HH:mm'}}</small></p>
               <p class="card-text"><small class="text-muted">by: {{item.usuario.nome}}</small></p>
@@ -53,7 +68,8 @@
       <div class="tab-pane fade" id="nav-minhasPostagens" role="tabpanel" aria-labelledby="nav-minhasPostagens-tab">
 
         <div class="card-columns">
-          <div class="card text-center" *ngFor='let item of user.postagem'>
+          <div class="card text-center" 
+          *ngFor='let item of user.postagem | orderBy  : key : reverse'>
             <div class="card-body">
               <h5 class="card-title m-0">{{item.titulo}}</h5>
               <small class="text-muted">Tema: {{item.tema.descricao}}</small>
@@ -67,8 +83,20 @@
 
         </div>
         <div class="tab-pane fade" id="nav-postagensTema" role="tabpanel" aria-labelledby="nav-postagensTema-tab">
+
+                  <!--Barra pesquisa Tema-->
+        <div *ngIf="listaPostagens.length != 0" class="row d-flex justify-content-center mt-5 mb-5">
+          <div class="col-md-4">
+            <div class="form-group">
+              <input type="text" class="form-control" id="titulo" placeholder="Digite um titulo de Tema para pesquisa"
+              [(ngModel)]="nomeTema" (keyup)="findbyNomeTema()"> 
+            </div>
+          </div>
+        </div>
+        <!--/Barra pesquisa Tema-->
           
-          <div class="card-columns" *ngFor='let item of listaTemas'>
+          <div class="card-columns" 
+          *ngFor='let item of listaTemas | orderBy  : key : reverse'>
             <div class="card text-center" *ngFor='let item of tema.postagem'>
               <div class="card-body">
                 <h5 class="card-title m-0">{{item.titulo}}</h5>
@@ -76,10 +104,8 @@
                 <p class="card-text"><small class="text-muted">{{item.data | date: 'dd/MM/yyyy'}} às {{item.data | date:
                     'HH:mm'}}</small></p>
                 <p class="card-text"><small class="text-muted">by: {{item.usuario.nome}}</small></p>
-
               </div>
             </div>
-
         </div>
       </div>
     </div>
